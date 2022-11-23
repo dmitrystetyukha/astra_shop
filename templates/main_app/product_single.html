@@ -1,0 +1,34 @@
+{% extends "main_app/base.html" %}
+{% load crispy_forms_filters %}
+
+
+{% block body_title %}{{ title }}{% endblock %}
+
+{% block body_content %}
+    {% if object %}
+        <div class="card text-center bg-white shadow">
+            <img class="rounded-1" src="{{ object.image.url }}" alt="">
+          <div class="card-body container py-3">
+            <p class="h2">{{ object.name.capitalize }}</p>
+            <p class="card-text">{{ object.description}}</p>
+            <div class="d-flex justify-content-between justify-content-center align-items-center">
+                <div class="row">
+                {% if request.user.is_authenticated %}
+                    <form class="w-25 col" action="{% url 'cart:cart_add' product.id %}" method="post">
+                        {{ add_to_cart_form.quantity }}
+                        {{ add_to_cart_form.update }}
+                        <input class="btn btn-primary" type="submit" value="В корзину">
+                        {% csrf_token %}
+                     </form>
+                {% endif %}
+                    <div class="col" style="width: 15rem">
+                        <a class="text-primary" href="{% url "category" category_id=object.category_id %}">В категорию «{{ product.category.name.capitalize }}»</a>
+                    </div>
+                </div>
+                <small class="text-muted col">ЦЕНА: {{ product.price }} ₽/шт.</small>
+            </div>
+          </div>
+    {% else %}
+        Упс, что-то пошло не так! Перейдите на главную и обновите страницу.
+    {% endif %}
+{% endblock %}

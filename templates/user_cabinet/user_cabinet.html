@@ -1,0 +1,76 @@
+{% extends "main_app/base.html" %}
+{% load mathfilters %}
+{% load crispy_forms_filters %}
+
+{% block body_title %}{% if request.user.is_authenticated %}Заказы пользователя{% endif%}{% endblock %}
+
+{% block body_content %}
+    {% if request.user.is_authenticated %}
+        {% if order_list %}
+            <div class="container">
+            <table class="table table-striped">
+                <thead>
+                    <th scope="col">№</th>
+                    <th scope="col">Дата заказа</th>
+                    <th scope="col">Содержимое заказа</th>
+                </thead>
+                <tbody>
+                    {% for order in order_list %}
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td width="2rem">{{ order.timestamp.date }}</td>
+                            <td>
+                                <ul class="list-group shadow">
+                                    {% for item in products_in_order %}
+                                        {% if item.order == order %}
+                                            <li class="list-group-item bg-white list-group-item-action">
+                                                <div class="row flex-row">
+                                                    <div class="col flex-column">
+                                                        <a class="text-primary fw-bold" href="{% url "product" product_id=item.product.pk %}">{{ item.product.name }}</a>
+                                                    </div>
+                                                    <div class="col flex-column">
+                                                        {{ item.product.price }} ₽.
+                                                    </div>
+                                                    <div class="col flex-column">
+                                                        {{ item.quantity }} шт.
+                                                    </div>
+                                                    <div class="col flex-column">
+                                                        {{ item.quantity|mul:item.product.price }}₽.
+                                                     </div>
+                                                </div>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        {% else %}
+            <div class="container">
+                <p class="display-5">Заказов пока что нет! <br> После оформления заказ попадет сюда. <br> Приятного пользования!</p>
+            </div>
+        {% endif %}
+    {% else %}
+         <div class="form-signin w-50 m-auto">
+            <form method="post">
+                <p class="h2">{{ title }}</p>
+                <div class="form-floating my-5 text-dark">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" type="submit">{{ button_text }}</button>
+                </div>
+                {% if button2_text %}
+                    <div class="text-center">
+                        <a class="btn btn-outline-danger m-3" href="{% url "reset" %}">Я забыл(а) пароль</a>
+                        <a class="btn btn-outline-primary my-2" href="{% url "register" %}">{{ button2_text }}</a>
+                    </div>
+                {% endif %}
+            </form>
+         </div>
+    {% endif %}
+{% endblock %}

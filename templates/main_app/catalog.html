@@ -1,0 +1,41 @@
+{% extends "main_app/base.html" %}
+
+{% block body_title %}Каталог товаров по категориям{% endblock %}
+
+{% block body_content %}
+    <div class="container">
+        <div class="album">
+            <div class="container d-flex justify-content-center mt-50 mb-50">
+            {% if productcategory_list%}
+                 <div class="row flex-column">
+                    <div class="col rounded-3">
+                        {% for productcategory in productcategory_list %}
+                            <div class="row py-4">
+                                <div class="col-lg-8 mx-auto">
+                                    <ul class="list-group shadow">
+                                        <li class="list-group-item row rounded-3 bg-white">
+                                            <img class="col" src="{{ productcategory.image.url }}" alt="{{ productcategory.name.lower.split }}-img">
+                                            <div class="media align-items-lg-center flex-column flex-lg-row col p-3">
+                                                <div class="media-body order-2 order-lg-1">
+                                                    <a class="text-primary" href="{% url "category" category_id=productcategory.id %}"><p class="h4 mt-0 mb-2">{{ productcategory.name.capitalize }}</p></a>
+                                                    <p class="font-italic text-muted mb-0 small">{{ productcategory.description.capitalize|truncatechars:55 }}</p>
+                                                    <div class="d-flex align-items-center justify-content-between mt-1">
+                                                        <h6 class="font-weight-bold my-2">Позиций в категории: {{productcategory.product_set.count}} шт.</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <p class="display-4 text-center">Здесь ничего нет! Перезагрузите страницу и, если это не помогло,
+                    <a class="text-primary" href="{% url "about" %}">свяжитесь с нами</a>!</p>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

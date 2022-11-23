@@ -1,0 +1,80 @@
+{% extends "main_app/base.html" %}
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block body_title %}{{ title }} | Контакты{% endblock %}
+
+{% block body_content %}
+    <div class="container marketing">
+        <div class="row featurette">
+          <div class="col-md-7 order-md-2">
+            <h2 class="featurette-heading fw-normal lh-1">Способы связаться с нами. <span class="text-muted">Мы всегда ответим!</span></h2>
+            <ul class="navbar-nav py-4">
+                <li class="nav-item nav-link">
+                    <a href="tel:79515132537" class="nav-item nav-link">
+                        <p class="h5"><i class="fa-solid fa-phone"></i> +7 951-513-25-37</p>
+                    </a>
+                </li>
+                <li class="nav-item nav-link">
+                    <div class="col nav-item nav-link">
+                        <a href="mailto:astra_tilda@mail.ru" class="nav-item nav-link">
+                            <p class="h5"><i class="fa-solid fa-envelope"></i> astra_tilda@mail.ru</p>
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item nav-link">
+                    <div class="col nav-item nav-link">
+                        <a href="https://t.me/TacitKilgor" class="nav-item nav-link">
+                            <p class="h5"><i class="fa-brands fa-telegram"></i> Написать нам в Telegram</p>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+          </div>
+          <div class="col-md-5 order-md-1">
+              <img class="rounded-3" src="{% static "main_app/img/manager.jpg" %}" alt="">
+          </div>
+        </div>
+        <hr class="featurette-divider">
+        <div class="row featurette">
+          <div class="col-md-7">
+            <h2 class="featurette-heading fw-normal lh-1">А здесь Вы сами сможете нас найти. <span class="text-muted">Мы всегда ждем Вас!</span></h2>
+            <p class="lead">Адрес сборки и производства мебели: ул. Нансена, 98, г. Ростов-на-Дону.</p>
+          </div>
+          <div class="col-md-5">
+              <iframe class="rounded-3" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1610.5224724911866!2d39.69509420482027!3d47.2446512250869!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40e3b850a59ce1a7%3A0x4e892e7c8a6270e3!2z0YPQuy4g0J3QsNC90YHQtdC90LAsIDkyLCDQoNC-0YHRgtC-0LIt0L3QsC3QlNC-0L3Rgywg0KDQvtGB0YLQvtCy0YHQutCw0Y8g0L7QsdC7LiwgMzQ0MDEy!5e0!3m2!1sru!2sru!4v1669144640824!5m2!1sru!2sru" width="500" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+      </div>
+    {% if not request.user.is_authenticated %}
+        <hr class="py-2">
+        <p class="display-5 w-75 m-auto my-5 text-center">Если не нашли на сайте того, что Вам нужно, оставьте заявку на обратную связь с помощью формы ниже. Мы обязательно ответим Вам!</p>
+        <div class="form-signin w-75 m-auto">
+            <form action="{% url "about" %}" method="post">
+                <div class="form-floating">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                </div>
+                <div class="container m-3 text-center">
+                    <button class="btn btn-primary my-3 w-50" type="submit">Отправить заявку</button>
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <hr class="py-2">
+        <p class="display-6 w-75 m-auto my-5 text-center">Если не нашли на сайте того, что Вам нужно, оставьте заявку на обратную связь с помощью формы ниже. Мы обязательно ответим Вам!</p>
+        <p class="display-6 w-50 m-auto my-3 text-center text-danger">Контактные данные вводить не нужно! <br> Мы возьмем их из указанных в Вашей учетной записи!</p>
+        <div class="form-signin w-75 m-auto">
+            <form action="{% url "about" %}" method="post">
+                <div class="form-floating">
+                    {% csrf_token %}
+                    {{ form.comment|as_crispy_field }}
+                    {{ form.preferred_communication_method|as_crispy_field }}
+                </div>
+                <div class="container m-3 text-center">
+                    <button class="btn btn-primary my-3 w-50" type="submit">Отправить заявку</button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

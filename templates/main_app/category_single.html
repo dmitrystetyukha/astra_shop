@@ -1,0 +1,37 @@
+{% extends "main_app/base.html" %}
+{% load crispy_forms_filters %}
+
+{% block body_title %}Товары категории «{{ title }}» {% endblock %}
+
+{% block body_content %}
+    {% if not request.user.is_authenticated %}<p class="display-6">Чтобы оформить заказ, зарегистрируйтесь, перейдя в <a class="text-primary" href="{% url "login" %}">ЛИЧНЫЙ КАБИНЕТ</a>. <br>Чтобы связаться с нами, перейдите в раздел <a class="text-primary" href="{% url "about" %}">О НАС</a> (оба раздела есть в боковом меню).</p>{% endif %}
+    {% if product_list %}
+        <div class="row flex-column">
+            <div class="col rounded-3">
+                {% for product in product_list %}
+                    <div class="row py-4">
+                        <div class="col-lg-8 mx-auto">
+                            <ul class="list-group shadow">
+                                <li class="list-group-item row rounded-3 bg-white">
+                                    <img class="col" src="{{ product.image.url }}" alt="{{ product.name.lower.split }}-img">
+                                    <div class="media align-items-lg-center flex-column flex-lg-row col p-3">
+                                        <div class="media-body order-2 order-lg-1">
+                                            <a class="text-primary" href="{% url "product" product_id=product.id %}"><p class="h4 mt-0 mb-2">{{ product.name.capitalize }}</p></a>
+                                            <p class="font-italic text-muted mb-0 small">{{ product.description.capitalize|truncatechars:150 }}</p>
+                                            <div class="d-flex align-items-center justify-content-between mt-1">
+                                                <h6 class="font-weight-bold my-2">ЦЕНА: {{product.price}} ₽/шт.</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a class="text-primary" href="{% url "catalog" %}">В каталог</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+    {% else %}
+                <p class="display-5">В категории «{{ title }}» товар временно отсутствует. Следите за обновлениями!</p>
+    {% endif %}
+            </div>
+        </div>
+{% endblock %}
