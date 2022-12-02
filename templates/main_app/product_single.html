@@ -17,7 +17,7 @@
                     <form class="w-25 col" action="{% url 'cart:cart_add' product.id %}" method="post">
                         {{ add_to_cart_form.quantity }}
                         {{ add_to_cart_form.update }}
-                        <input class="btn btn-primary" type="submit" value="В корзину">
+                        <input class="btn btn-dark" type="submit" value="В корзину">
                         {% csrf_token %}
                      </form>
                 {% endif %}

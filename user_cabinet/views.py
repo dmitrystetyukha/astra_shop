@@ -4,10 +4,10 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import *
 
-from main_app.utils import menu
 from user_cabinet.forms import *
 
 from main_app.models import *
+from user_cabinet.models import *
 
 
 class RegisterUser(CreateView):
@@ -19,10 +19,8 @@ class RegisterUser(CreateView):
     template_name = "user_cabinet/user_cabinet.html"
     success_url = reverse_lazy("login")
     extra_context = {
-        "title": "Кабинет пользователя | Регистрация",
-        "head_title": "Интернет-магазин фурнитуры АСТРА | Регистрация",
+        "title": "Регистрация",
         "button_text": "Зарегистрироваться",
-        "menu": menu,
     }
 
     def form_valid(self, form):
@@ -43,11 +41,9 @@ class Login(LoginView):
     template_name = "user_cabinet/user_cabinet.html"
     success_url = "main_page"
     extra_context = {
-        "title": "Кабинет пользователя | Авторизация",
-        "head_title": "Интернет-магазин фурнитуры АСТРА | Авторизация",
+        "title": "Авторизация",
         "button_text": "Авторизоваться",
         "button2_text": "Я хочу создать аккаунт",
-        "menu": menu,
     }
 
 
@@ -60,10 +56,8 @@ class ResetPassword(PasswordResetView):
     template_name = "user_cabinet/user_cabinet.html"
     success_url = "main_page"
     extra_context = {
-        "title": "Кабинет пользователя | Сброс пароля",
-        "head_title": "Интернет-магазин фурнитуры АСТРА | Сброс пароля",
+        "title": "Сброс пароля",
         "button_text": "Сбросить пароль",
-        "menu": menu,
     }
 
 
@@ -75,13 +69,12 @@ class UserCabinet(ListView):
     model = Order
     template_name = "user_cabinet/user_cabinet.html"
     extra_context = {
-        "title": "Кабинет пользователя | Заказы",
-        "head_title": "Интернет-магазин фурнитуры АСТРА | Личный кабинет",
-        "menu": menu,
+        "title": "Заказы",
         "products_in_order": 0,
     }
 
     def get_queryset(self):
+        """Возвращает список заказов для пользователя"""
         orders_created_by_current_user = Order.objects.filter(
             customer=self.request.user
         )

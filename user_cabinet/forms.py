@@ -1,4 +1,7 @@
 from django.contrib.auth.forms import *
+
+from .models import User
+
 from django import forms
 
 

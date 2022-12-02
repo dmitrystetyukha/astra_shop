@@ -68,7 +68,9 @@ class Order(models.Model):
     timestamp = models.DateTimeField(
         blank=False,
     )
-    customer = models.ForeignKey(to="auth.User", blank=False, on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        to="user_cabinet.User", blank=False, on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return f"{self.timestamp}, order #{self.pk} from {self.customer.first_name}"

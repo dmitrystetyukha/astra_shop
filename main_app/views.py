@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 
-from astra_shop.settings import CART_SESSION_ID
 from main_app.forms import *
 from main_app.models import *
 from main_app.utils import *
@@ -11,7 +10,8 @@ add_to_cart_form = CartAddProductForm()
 
 
 def main_page(request):
-    context_data = {"menu": menu, "title": "Главная"}
+    """Отображает главную страницу"""
+    context_data = {"title": "Главная"}
     return render(request, "main_app/main_page.html", context=context_data)
 
 
@@ -29,7 +29,7 @@ class Catalog(ListView):
 
     model = ProductCategory
     template_name = "main_app/catalog.html"
-    extra_context = {"menu": menu, "title": "Каталог товаров"}
+    extra_context = {"title": "Каталог товаров"}
 
 
 class Category(ListView):
@@ -46,9 +46,8 @@ class Category(ListView):
     """
 
     model = Product
-    form = CartAddProductForm()
     template_name = "main_app/category_single.html"
-    extra_context = {"menu": menu, "title": "", "add_to_cart_form": add_to_cart_form}
+    extra_context = {"menu": menu, "title": ""}
 
     def get_queryset(self):
         title = (
@@ -74,7 +73,7 @@ class ProductSingle(DetailView):
     extra_context -- дополнительные данные, отправляемых шаблонизатору
     """
 
-    model = Product
+    model = Product  # используемая таблица в БД
     slug_field = "pk"
     template_name = "main_app/product_single.html"
     extra_context = {"title": "", "add_to_cart_form": add_to_cart_form}
@@ -96,13 +95,17 @@ def about(request):
         else CallBackOrderForUnauthorizedUsers(request.POST)
     )
     if form.is_valid():
+        # если данные в форме верны
         form_data: dict = form.cleaned_data
         call_back_order = CallBackOrder()
-
         if user_is_authorized:
+            # Если пользователь авторизован
+            phone_number_from_db = (
+                request.user.phone_number
+            )
             call_back_order.name = request.user.first_name
             call_back_order.email = request.user.email
-            call_back_order.phone_number = request.user.phone_number
+            call_back_order.phone_number = phone_number_from_db
             call_back_order.comment = (
                 form_data["comment"]
                 + "\nПредпочитаемый способ связи: "
@@ -119,6 +122,7 @@ def about(request):
             )
         call_back_order.timestamp = datetime.now()
         call_back_order.save()
+        # сохраняется заявка на обратный
         form = (
             CallBackOrderForAuthorizedUsers()
             if user_is_authorized

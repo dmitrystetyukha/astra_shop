@@ -51,7 +51,7 @@ def cart_detail(request):
 @require_POST
 def create_order(request):
     """
-    Создает и сохраняет заказ, основываясь на содержимом корзины, перенаправляет на детольное отображение корзины
+    Создает и сохраняет заказ, основываясь на содержимом корзины, перенаправляет на детальное отображение корзины
     """
     cart = Cart(request)
     order = Order(customer=request.user, timestamp=datetime.now())

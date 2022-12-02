@@ -46,6 +46,8 @@ class CallBackOrderForUnauthorizedUsers(forms.Form):
 
 
 class CallBackOrderForAuthorizedUsers(forms.Form):
+    """ """
+
     comment = forms.CharField(
         max_length=350,
         widget=forms.Textarea(

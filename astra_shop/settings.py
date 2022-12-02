@@ -110,3 +110,5 @@ LOGIN_REDIRECT_URL = "main_page"
 LOGOUT_REDIRECT_URL = "main_page"
 
 CART_SESSION_ID = "cart"
+
+AUTH_USER_MODEL = "user_cabinet.User"

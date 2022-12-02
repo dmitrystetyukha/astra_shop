@@ -62,12 +62,12 @@
                     {{ form|crispy }}
                 </div>
                 <div class="text-center">
-                    <button class="btn btn-primary" type="submit">{{ button_text }}</button>
+                    <button class="btn btn-dark " type="submit">{{ button_text }}</button>
                 </div>
                 {% if button2_text %}
                     <div class="text-center">
-                        <a class="btn btn-outline-danger m-3" href="{% url "reset" %}">Я забыл(а) пароль</a>
-                        <a class="btn btn-outline-primary my-2" href="{% url "register" %}">{{ button2_text }}</a>
+                        <a class="btn btn-secondary my-2" href="{% url "register" %}">{{ button2_text }}</a>
+                        <a class="btn btn-outline-dark m-3" href="{% url "reset" %}">Я забыл(а) пароль</a>
                     </div>
                 {% endif %}
             </form>

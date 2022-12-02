@@ -23,7 +23,7 @@
                 <form action="{% url 'cart:cart_add' item.product.pk %}" method="post">
                     {% csrf_token %}
                     {{ item.update_quantity_form.quantity }} шт. {{ item.update_quantity_form.update }}
-                    <input class="btn btn-primary" type="submit" value="Изменить">
+                    <input class="btn btn-dark " type="submit" value="Изменить">
                 </form>
             </div>
               <form action="{% url 'cart:cart_remove' item.product.pk %}">
@@ -40,8 +40,8 @@
           <div class="container d-flex align-items-center">
               <form class="w-100" action="{% url "cart:create_order" %}" method="post">
                   {% csrf_token %}
-                  <button type="submit" class="w-75 btn btn-primary btn-lg">Оформить заказ</button>
-                  <a href="{% url "catalog" %}" class="btn btn-outline-dark btn-lg">В каталог</a>
+                  <button type="submit" class="w-75 btn btn-dark btn-lg">Оформить заказ</button>
+                  <a href="{% url "catalog" %}" class="btn btn-secondary btn-lg">В каталог</a>
               </form>
           </div>
       </div>
